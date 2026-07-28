@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function Home() {
   return (
     <main className="home-page">
@@ -6,9 +8,9 @@ function Home() {
 
         <div className="home-content">
 
-          <div className="eyebrow">
-            ACADEMIC E-PORTFOLIO
-          </div>
+          <p className="eyebrow">
+            E-WASTE × ENVIRONMENTAL SUSTAINABILITY
+          </p>
 
           <h1>
             Saurabh
@@ -17,23 +19,25 @@ function Home() {
           </h1>
 
           <h2>
-            E-Waste & Environmental Sustainability
+            B.Tech Information Technology student exploring
+            the relationship between technology and our environment.
           </h2>
 
           <p>
-            Welcome to my academic e-portfolio. This space presents
-            my assignments, activities, research and academic work
-            related to e-waste and environmental sustainability.
+            Welcome to my academic e-portfolio, a collection of
+            my assignments, activities and academic work focused
+            on e-waste and environmental sustainability.
           </p>
 
           <div className="student-tags">
-            <span>B.Tech Information Technology</span>
+            <span>B.Tech IT</span>
             <span>Roll No. 24101C0040</span>
+            <span>E-Waste & Environment</span>
           </div>
 
-          <a href="/portfolio" className="explore-btn">
-            Explore My Work →
-          </a>
+          <Link to="/portfolio" className="explore-btn">
+            Explore Work →
+          </Link>
 
         </div>
 
@@ -42,12 +46,12 @@ function Home() {
 
           <div className="circuit-circle"></div>
 
-          <div className="earth">
-            🌍
-          </div>
-
           <div className="recycle-ring">
             ♻
+          </div>
+
+          <div className="earth">
+            🌍
           </div>
 
           <div className="leaf leaf-one">
@@ -66,20 +70,24 @@ function Home() {
       <section className="home-intro">
 
         <div>
+
           <p className="section-label">
-            MY E-PORTFOLIO
+            ABOUT THIS PORTFOLIO
           </p>
 
           <h2>
-            Learning about
-            <span> our impact.</span>
+            Technology should
+            <span> work with nature.</span>
           </h2>
+
         </div>
 
         <p>
-          Through this portfolio, I document my understanding of
-          electronic waste, its environmental impact, responsible
-          disposal and sustainable approaches to technology.
+          This e-portfolio presents my academic journey through
+          the study of e-waste and environmental sustainability.
+          Here you can explore my assignments, activities,
+          presentations and other academic work collected
+          throughout the subject.
         </p>
 
       </section>
