@@ -236,6 +236,44 @@ export default function Assignment() {
           </div>
         )}
 
+        {/* ONLINE LINKS SECTION */}
+        {Array.isArray(assignment.links) && assignment.links.length > 0 && (
+          <div className="assignment-links-section">
+            <div className="links-section-heading">
+              <span>🔗</span>
+              <h3>Activity Links & Online Resources</h3>
+            </div>
+            <div className="links-grid">
+              {assignment.links.map((link, idx) => {
+                const labelLower = (link.label || "").toLowerCase();
+                let icon = "🌐";
+                if (labelLower.includes("github")) icon = "💻";
+                else if (labelLower.includes("youtube")) icon = "▶️";
+                else if (labelLower.includes("drive")) icon = "📁";
+                else if (labelLower.includes("presentation")) icon = "📊";
+                else if (labelLower.includes("paper") || labelLower.includes("report")) icon = "📄";
+
+                return (
+                  <a
+                    key={idx}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="activity-link-card"
+                  >
+                    <div className="link-card-icon">{icon}</div>
+                    <div className="link-card-info">
+                      <strong className="link-card-label">{link.label || "External Link"}</strong>
+                      <span className="link-card-url">{link.url}</span>
+                    </div>
+                    <span className="link-card-arrow">↗</span>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {/* Full Activity Description */}
         <div className="assignment-description">
           <h3>Description</h3>

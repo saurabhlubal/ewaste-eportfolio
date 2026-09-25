@@ -15,6 +15,17 @@ const CATEGORIES = [
   "Case Study",
 ];
 
+const PRESET_LINK_LABELS = [
+  "GitHub",
+  "Live Project",
+  "YouTube",
+  "Google Drive",
+  "Research Paper",
+  "Presentation",
+  "Website",
+  "Other",
+];
+
 export default function ActivityFormModal({
   isOpen,
   onClose,
@@ -40,6 +51,13 @@ export default function ActivityFormModal({
     Array.isArray(initialData?.tags)
       ? initialData.tags.join(", ")
       : initialData?.tags || ""
+  );
+
+  // Links list state
+  const [links, setLinks] = useState(
+    Array.isArray(initialData?.links) && initialData.links.length > 0
+      ? initialData.links
+      : []
   );
 
   const [file, setFile] = useState(null);
@@ -105,6 +123,26 @@ export default function ActivityFormModal({
     return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + " " + sizes[i];
   };
 
+  // Link management helpers
+  const handleAddLink = () => {
+    setLinks((prev) => [
+      ...prev,
+      { id: Date.now().toString(), label: "GitHub", url: "" },
+    ]);
+  };
+
+  const handleUpdateLink = (index, field, value) => {
+    setLinks((prev) => {
+      const copy = [...prev];
+      copy[index] = { ...copy[index], [field]: value };
+      return copy;
+    });
+  };
+
+  const handleRemoveLink = (index) => {
+    setLinks((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError("");
@@ -119,8 +157,15 @@ export default function ActivityFormModal({
       return;
     }
 
-    if (!isEdit && !file) {
-      setFormError("Please select a file to upload.");
+    const validLinks = links.filter((l) => l.url && l.url.trim().length > 0);
+
+    // Validation: Require either a file, an existing file (if edit), or at least one link
+    const hasExistingFile = isEdit && Boolean(initialData?.fileUrl);
+    const hasUploadedFile = Boolean(file);
+    const hasLinks = validLinks.length > 0;
+
+    if (!hasUploadedFile && !hasExistingFile && !hasLinks) {
+      setFormError("Please select a file to upload OR provide at least one online link (e.g. GitHub, Live Demo, Drive).");
       return;
     }
 
@@ -143,6 +188,7 @@ export default function ActivityFormModal({
             .split(",")
             .map((t) => t.trim())
             .filter(Boolean),
+          links: validLinks,
           storagePath: initialData?.storagePath,
           fileUrl: initialData?.fileUrl,
           fileName: initialData?.fileName,
@@ -265,10 +311,13 @@ export default function ActivityFormModal({
             />
           </div>
 
-          {/* File Upload Zone */}
+          {/* File Upload Zone (Optional if links provided) */}
           <div className="form-group">
             <label>
-              Assignment File {isEdit ? "(Leave empty to keep existing file)" : <span className="req">*</span>}
+              File Attachment{" "}
+              <span className="opt">
+                {links.length > 0 ? "(Optional if link provided)" : "(Upload file OR add link below)"}
+              </span>
             </label>
 
             <div
@@ -304,7 +353,7 @@ export default function ActivityFormModal({
                   <p className="file-meta">
                     {initialData.fileType}
                   </p>
-                  <span className="file-change-hint">Click or drag to upload a replacement file</span>
+                  <span className="file-change-hint">Click or drag to replace with a new file</span>
                 </div>
               ) : (
                 <div className="dropzone-text">
@@ -313,13 +362,74 @@ export default function ActivityFormModal({
                     <span className="browse-link">browse</span>
                   </p>
                   <p className="dropzone-types">
-                    Supported: PDF, DOC, DOCX, PPT, PPTX, JPG, PNG (Max {MAX_FILE_SIZE_MB}MB)
+                    PDF, DOC, DOCX, PPT, PPTX, JPG, PNG (Max {MAX_FILE_SIZE_MB}MB)
                   </p>
                 </div>
               )}
             </div>
 
             {fileError && <p className="field-error">{fileError}</p>}
+          </div>
+
+          {/* LINKS SECTION (Link-Only / Multiple Links) */}
+          <div className="form-group links-form-section">
+            <div className="links-header">
+              <label>
+                Activity Links <span className="opt">(GitHub, YouTube, Live Project, Drive, etc.)</span>
+              </label>
+              <button
+                type="button"
+                className="btn-add-link"
+                onClick={handleAddLink}
+                disabled={isSubmitting}
+              >
+                + Add Link
+              </button>
+            </div>
+
+            {links.length === 0 ? (
+              <p className="no-links-hint">
+                No links added. Click "+ Add Link" to submit a GitHub repo, YouTube video, Drive link, or Live URL.
+              </p>
+            ) : (
+              <div className="links-list">
+                {links.map((linkItem, index) => (
+                  <div key={linkItem.id || index} className="link-item-row">
+                    <select
+                      value={linkItem.label}
+                      onChange={(e) => handleUpdateLink(index, "label", e.target.value)}
+                      className="link-label-select"
+                      disabled={isSubmitting}
+                    >
+                      {PRESET_LINK_LABELS.map((preset) => (
+                        <option key={preset} value={preset}>
+                          {preset}
+                        </option>
+                      ))}
+                    </select>
+
+                    <input
+                      type="url"
+                      placeholder="https://example.com/..."
+                      value={linkItem.url}
+                      onChange={(e) => handleUpdateLink(index, "url", e.target.value)}
+                      className="link-url-input"
+                      disabled={isSubmitting}
+                    />
+
+                    <button
+                      type="button"
+                      className="btn-remove-link"
+                      onClick={() => handleRemoveLink(index)}
+                      title="Remove link"
+                      disabled={isSubmitting}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Remarks (Optional) */}
@@ -370,7 +480,7 @@ export default function ActivityFormModal({
               {isSubmitting ? (
                 <>
                   <span className="spinner"></span>
-                  {isEdit ? "Saving Changes..." : "Uploading & Submitting..."}
+                  {isEdit ? "Saving Changes..." : "Submitting..."}
                 </>
               ) : (
                 isEdit ? "Save Changes" : "Submit Activity"

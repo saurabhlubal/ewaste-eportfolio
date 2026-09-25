@@ -79,13 +79,23 @@ export default function Portfolio() {
   };
 
   const getFileIcon = (activity) => {
-    const type = (activity.fileType || "").toLowerCase();
-    const name = (activity.fileName || "").toLowerCase();
-    if (type.includes("pdf") || name.endsWith(".pdf")) return "📄";
-    if (type.includes("image") || name.match(/\.(jpg|jpeg|png|webp)$/)) return "🖼️";
-    if (name.match(/\.(ppt|pptx)$/)) return "📊";
-    if (name.match(/\.(doc|docx)$/)) return "📝";
-    return "📎";
+    if (activity.fileName) {
+      const type = (activity.fileType || "").toLowerCase();
+      const name = (activity.fileName || "").toLowerCase();
+      if (type.includes("pdf") || name.endsWith(".pdf")) return "📄";
+      if (type.includes("image") || name.match(/\.(jpg|jpeg|png|webp)$/)) return "🖼️";
+      if (name.match(/\.(ppt|pptx)$/)) return "📊";
+      if (name.match(/\.(doc|docx)$/)) return "📝";
+      return "📎";
+    }
+    if (Array.isArray(activity.links) && activity.links.length > 0) {
+      const firstLabel = activity.links[0]?.label?.toLowerCase() || "";
+      if (firstLabel.includes("github")) return "💻";
+      if (firstLabel.includes("youtube")) return "▶️";
+      if (firstLabel.includes("drive")) return "📁";
+      return "🔗";
+    }
+    return "📄";
   };
 
   return (
@@ -188,12 +198,22 @@ export default function Portfolio() {
                       : item.description}
                   </p>
 
-                  {item.fileName && (
-                    <div className="card-file-badge">
-                      <span className="file-badge-icon">📎</span>
-                      <span className="file-badge-name">{item.fileName}</span>
-                    </div>
-                  )}
+                  <div className="card-attachments-row">
+                    {item.fileName && (
+                      <div className="card-file-badge">
+                        <span className="file-badge-icon">📎</span>
+                        <span className="file-badge-name">{item.fileName}</span>
+                      </div>
+                    )}
+                    {Array.isArray(item.links) && item.links.length > 0 && (
+                      <div className="card-link-badge">
+                        <span className="link-badge-icon">🔗</span>
+                        <span className="link-badge-name">
+                          {item.links.length === 1 ? item.links[0].label || "1 Link" : `${item.links.length} Links`}
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div className="card-actions-row">

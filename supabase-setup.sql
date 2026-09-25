@@ -12,6 +12,7 @@ create table if not exists public.activities (
   date text not null,
   remarks text default '',
   tags text[] default '{}',
+  links jsonb default '[]'::jsonb,
   file_name text,
   file_type text,
   file_size bigint default 0,
@@ -20,6 +21,9 @@ create table if not exists public.activities (
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
+
+-- Ensure links column exists if table was already created earlier
+alter table public.activities add column if not exists links jsonb default '[]'::jsonb;
 
 -- 2. Enable Row Level Security (RLS)
 alter table public.activities enable row level security;

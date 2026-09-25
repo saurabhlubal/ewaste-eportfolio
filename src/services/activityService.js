@@ -13,6 +13,7 @@ export const convertStaticAssignments = () => {
     date: item.date || new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" }),
     remarks: item.shortDescription || "",
     tags: ["E-Waste", "Sustainability"],
+    links: [],
     fileName: item.pdf ? "crossword.pdf" : (item.image ? "assignment-01.jpeg" : "document.pdf"),
     fileType: item.pdf ? "application/pdf" : (item.image ? "image/jpeg" : "application/pdf"),
     fileSize: 1024 * 1024,
@@ -81,6 +82,7 @@ export async function getActivities() {
       date: row.date,
       remarks: row.remarks || "",
       tags: Array.isArray(row.tags) ? row.tags : (row.tags ? [row.tags] : []),
+      links: Array.isArray(row.links) ? row.links : (row.links ? JSON.parse(row.links) : []),
       fileName: row.file_name || "",
       fileType: row.file_type || "",
       fileSize: row.file_size || 0,
@@ -125,6 +127,7 @@ export async function getActivityById(id) {
       date: data.date,
       remarks: data.remarks || "",
       tags: Array.isArray(data.tags) ? data.tags : (data.tags ? [data.tags] : []),
+      links: Array.isArray(data.links) ? data.links : (data.links ? JSON.parse(data.links) : []),
       fileName: data.file_name || "",
       fileType: data.file_type || "",
       fileSize: data.file_size || 0,
@@ -195,12 +198,16 @@ export async function uploadActivityFile(file) {
 /**
  * Create a new activity in Supabase
  */
-export async function createActivity(activityInput, file) {
+export async function createActivity(activityInput, file = null) {
   let uploadedFileInfo = null;
 
   if (file) {
     uploadedFileInfo = await uploadActivityFile(file);
   }
+
+  const cleanLinks = Array.isArray(activityInput.links)
+    ? activityInput.links.filter((l) => l && l.url && l.url.trim())
+    : [];
 
   const payload = {
     title: activityInput.title.trim(),
@@ -211,6 +218,7 @@ export async function createActivity(activityInput, file) {
     tags: Array.isArray(activityInput.tags)
       ? activityInput.tags
       : (activityInput.tags ? activityInput.tags.split(",").map((t) => t.trim()).filter(Boolean) : []),
+    links: cleanLinks,
     file_name: uploadedFileInfo?.fileName || activityInput.fileName || "",
     file_type: uploadedFileInfo?.fileType || activityInput.fileType || "",
     file_size: uploadedFileInfo?.fileSize || activityInput.fileSize || 0,
@@ -228,6 +236,7 @@ export async function createActivity(activityInput, file) {
       date: payload.date,
       remarks: payload.remarks,
       tags: payload.tags,
+      links: payload.links,
       fileName: payload.file_name,
       fileType: payload.file_type,
       fileSize: payload.file_size,
@@ -260,6 +269,7 @@ export async function createActivity(activityInput, file) {
     date: data.date,
     remarks: data.remarks,
     tags: Array.isArray(data.tags) ? data.tags : [],
+    links: Array.isArray(data.links) ? data.links : [],
     fileName: data.file_name,
     fileType: data.file_type,
     fileSize: data.file_size,
@@ -280,6 +290,10 @@ export async function updateActivity(id, activityInput, newFile = null) {
     uploadedFileInfo = await uploadActivityFile(newFile);
   }
 
+  const cleanLinks = Array.isArray(activityInput.links)
+    ? activityInput.links.filter((l) => l && l.url && l.url.trim())
+    : [];
+
   const payload = {
     title: activityInput.title?.trim(),
     description: activityInput.description?.trim(),
@@ -289,6 +303,7 @@ export async function updateActivity(id, activityInput, newFile = null) {
     tags: Array.isArray(activityInput.tags)
       ? activityInput.tags
       : (activityInput.tags ? activityInput.tags.split(",").map((t) => t.trim()).filter(Boolean) : []),
+    links: cleanLinks,
     updated_at: new Date().toISOString(),
   };
 
@@ -349,6 +364,7 @@ export async function updateActivity(id, activityInput, newFile = null) {
     date: data.date,
     remarks: data.remarks,
     tags: Array.isArray(data.tags) ? data.tags : [],
+    links: Array.isArray(data.links) ? data.links : [],
     fileName: data.file_name,
     fileType: data.file_type,
     fileSize: data.file_size,
@@ -410,6 +426,7 @@ export async function seedExistingAssignments() {
       date: item.date,
       remarks: item.remarks,
       tags: item.tags,
+      links: [],
       file_name: item.fileName,
       file_type: item.fileType,
       file_size: item.fileSize,
@@ -435,6 +452,7 @@ export async function seedExistingAssignments() {
       date: row.date,
       remarks: row.remarks || "",
       tags: Array.isArray(row.tags) ? row.tags : [],
+      links: Array.isArray(row.links) ? row.links : [],
       fileName: row.file_name || "",
       fileType: row.file_type || "",
       fileSize: row.file_size || 0,
