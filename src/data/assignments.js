@@ -17,7 +17,23 @@ To contribute towards a greener future, I plan to practice responsible disposal 
 
 By following the principles of Reduce, Reuse and Recycle, I hope to contribute towards a cleaner and healthier environment.
 `,
-  },
+  }, 
+  {
+  id: 2,
+  title: "Crossword PDF",
+  date: "06 August 2026",
+
+  pdf: "/assignments/pdfs/crossword.pdf",
+
+  shortDescription:
+    "Crossword puzzle based on e-waste and environmental sustainability concepts.",
+
+  description: `
+This assignment is an educational crossword puzzle prepared as part of the E-Waste and Environmental Studies course. It focuses on important terms and concepts related to electronic waste, recycling, environmental protection, sustainability, and responsible waste management.
+
+The activity helped strengthen my understanding of key environmental concepts in an engaging and interactive manner while improving my knowledge of sustainable practices.
+`,
+},
 ];
 
 export default assignments;
