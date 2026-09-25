@@ -2,6 +2,24 @@ import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
+  Search,
+  PlusCircle,
+  FileText,
+  Image as ImageIcon,
+  FileCode,
+  FileSpreadsheet,
+  Globe,
+  Calendar,
+  ArrowRight,
+  Edit3,
+  Trash2,
+  FolderOpen,
+  Sparkles,
+  Layers,
+  CheckCircle2,
+  X
+} from "lucide-react";
+import {
   getActivities,
   createActivity,
   updateActivity,
@@ -83,7 +101,7 @@ export default function Portfolio() {
     setTimeout(() => setFeedback(""), 4500);
   };
 
-  // Derive categories list dynamically
+  // Categories list
   const categoriesList = useMemo(() => {
     const set = new Set(["All"]);
     activities.forEach((a) => {
@@ -123,30 +141,23 @@ export default function Portfolio() {
     if (activity.fileName) {
       const type = (activity.fileType || "").toLowerCase();
       const name = (activity.fileName || "").toLowerCase();
-      if (type.includes("pdf") || name.endsWith(".pdf")) return "📄";
-      if (type.includes("image") || name.match(/\.(jpg|jpeg|png|webp)$/)) return "🖼️";
-      if (name.match(/\.(ppt|pptx)$/)) return "📊";
-      if (name.match(/\.(doc|docx)$/)) return "📝";
-      return "📎";
+      if (type.includes("pdf") || name.endsWith(".pdf")) return <FileText size={24} className="icon-emerald" />;
+      if (type.includes("image") || name.match(/\.(jpg|jpeg|png|webp)$/)) return <ImageIcon size={24} className="icon-emerald" />;
+      if (name.match(/\.(ppt|pptx)$/)) return <FileSpreadsheet size={24} className="icon-emerald" />;
+      if (name.match(/\.(doc|docx)$/)) return <FileText size={24} className="icon-emerald" />;
+      return <FileCode size={24} className="icon-emerald" />;
     }
     if (Array.isArray(activity.links) && activity.links.length > 0) {
-      const firstLabel = activity.links[0]?.label?.toLowerCase() || "";
-      if (firstLabel.includes("github")) return "💻";
-      if (firstLabel.includes("youtube")) return "▶️";
-      if (firstLabel.includes("drive")) return "📁";
-      return "🔗";
+      return <Globe size={24} className="icon-emerald" />;
     }
-    return "📄";
+    return <FileText size={24} className="icon-emerald" />;
   };
 
-  // Framer Motion container & card variants
   const gridVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.08,
-      },
+      transition: { staggerChildren: 0.08 },
     },
   };
 
@@ -155,7 +166,7 @@ export default function Portfolio() {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
     },
   };
 
@@ -170,7 +181,7 @@ export default function Portfolio() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
           >
-            ✓ {feedback}
+            <CheckCircle2 size={18} /> {feedback}
           </motion.div>
         )}
       </AnimatePresence>
@@ -181,28 +192,27 @@ export default function Portfolio() {
           <div className="supabase-banner-content">
             <span className="banner-icon">ℹ️</span>
             <div>
-              <strong>Local Mode:</strong> Running with local storage. Add <code>VITE_SUPABASE_URL</code> and <code>VITE_SUPABASE_ANON_KEY</code> in <code>.env</code> to connect cloud PostgreSQL & Storage.
+              <strong>Local Mode:</strong> Running with browser storage. Set <code>VITE_SUPABASE_URL</code> and <code>VITE_SUPABASE_ANON_KEY</code> in <code>.env</code> to connect cloud PostgreSQL & Supabase Storage.
             </div>
           </div>
         </div>
       )}
 
       {/* =========================================================
-          PORTFOLIO HERO & SUMMARY STATS
+          PORTFOLIO HERO & DASHBOARD TELEMETRY
       ========================================================= */}
       <section className="portfolio-header">
-        <p className="section-label">MY ACADEMIC REPOSITORY</p>
+        <span className="section-label">ACADEMIC WORK REPOSITORY</span>
 
         <h1>
-          Coursework &
-          <span> Activities.</span>
+          Coursework & <span>Activities.</span>
         </h1>
 
         <p>
-          A comprehensive record of assignments, interactive learning tools, field reports, and open resources created during the E-Waste & Sustainability coursework.
+          Explore submitted laboratory activities, environmental crosswords, academic papers, and companion digital tools documenting responsible e-waste practices.
         </p>
 
-        {/* Dynamic Activity Stats Bar */}
+        {/* Dashboard Stat Cards */}
         <div className="portfolio-stats-grid">
           <div className="portfolio-stat-card">
             <span className="stat-val">{stats.total}</span>
@@ -211,7 +221,7 @@ export default function Portfolio() {
 
           <div className="portfolio-stat-card">
             <span className="stat-val">{stats.filesCount}</span>
-            <span className="stat-lbl">Academic Files</span>
+            <span className="stat-lbl">Documents & PDFs</span>
           </div>
 
           <div className="portfolio-stat-card">
@@ -221,7 +231,7 @@ export default function Portfolio() {
 
           <div className="portfolio-stat-card highlight">
             <span className="stat-val">100%</span>
-            <span className="stat-lbl">Green Focus</span>
+            <span className="stat-lbl">Green Curriculum</span>
           </div>
         </div>
 
@@ -233,7 +243,7 @@ export default function Portfolio() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <span>+</span> Submit New Activity
+            <PlusCircle size={18} /> Submit New Activity
           </motion.button>
         </div>
       </section>
@@ -244,10 +254,10 @@ export default function Portfolio() {
       <section className="portfolio-filter-section">
         <div className="portfolio-filter-container">
           <div className="search-bar-wrapper">
-            <span className="search-icon">🔍</span>
+            <Search size={18} className="search-icon-svg" />
             <input
               type="text"
-              placeholder="Search by title, description, or tag..."
+              placeholder="Search activities by title, description, or keyword..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="portfolio-search-input"
@@ -257,8 +267,9 @@ export default function Portfolio() {
                 type="button"
                 className="clear-search-btn"
                 onClick={() => setSearchQuery("")}
+                aria-label="Clear Search"
               >
-                ✕
+                <X size={16} />
               </button>
             )}
           </div>
@@ -301,7 +312,7 @@ export default function Portfolio() {
               <h3>No matching activities found</h3>
               <p>
                 {searchQuery || selectedCategory !== "All"
-                  ? "Try resetting your search query or selecting 'All' categories."
+                  ? "Try adjusting your search query or choosing 'All' categories."
                   : "Submit your first academic e-waste activity!"}
               </p>
               <button
@@ -309,7 +320,7 @@ export default function Portfolio() {
                 className="add-activity-btn"
                 onClick={() => setIsSubmitOpen(true)}
               >
-                + Submit New Activity
+                <PlusCircle size={18} /> Submit New Activity
               </button>
             </div>
           ) : (
@@ -324,7 +335,7 @@ export default function Portfolio() {
                   className="work-card"
                   key={item.id}
                   variants={cardVariants}
-                  whileHover={{ y: -5 }}
+                  whileHover={{ y: -6 }}
                   transition={{ duration: 0.2 }}
                 >
                   <div className="card-top">
@@ -344,31 +355,35 @@ export default function Portfolio() {
                       <span className="card-type">
                         {item.category ? item.category.toUpperCase() : "ASSIGNMENT"}
                       </span>
-                      {item.date && <span className="card-date">{item.date}</span>}
+                      {item.date && (
+                        <span className="card-date">
+                          <Calendar size={12} className="inline-icon" /> {item.date}
+                        </span>
+                      )}
                     </div>
 
                     <h2>{item.title}</h2>
 
                     <p>
-                      {item.remarks || item.description?.length > 130
-                        ? (item.remarks || item.description.slice(0, 127) + "...")
+                      {item.remarks || item.description?.length > 135
+                        ? (item.remarks || item.description.slice(0, 132) + "...")
                         : item.description}
                     </p>
 
                     <div className="card-attachments-row">
                       {item.fileName && (
                         <div className="card-file-badge">
-                          <span className="file-badge-icon">📎</span>
+                          <FileText size={12} className="chip-svg" />
                           <span className="file-badge-name">{item.fileName}</span>
                         </div>
                       )}
                       {Array.isArray(item.links) && item.links.length > 0 && (
                         <div className="card-link-badge">
-                          <span className="link-badge-icon">🔗</span>
+                          <Globe size={12} className="chip-svg" />
                           <span className="link-badge-name">
                             {item.links.length === 1
                               ? item.links[0].label || "1 Link"
-                              : `${item.links.length} Links`}
+                              : `${item.links.length} Resources`}
                           </span>
                         </div>
                       )}
@@ -377,7 +392,7 @@ export default function Portfolio() {
 
                   <div className="card-actions-row">
                     <Link to={`/assignment/${item.id}`} className="view-work">
-                      View Details <span>→</span>
+                      View Details <ArrowRight size={15} />
                     </Link>
 
                     <div className="card-mgmt-btns">
@@ -387,7 +402,7 @@ export default function Portfolio() {
                         title="Edit Activity"
                         onClick={() => setEditingActivity(item)}
                       >
-                        ✏️ Edit
+                        <Edit3 size={13} /> Edit
                       </button>
                       <button
                         type="button"
@@ -395,7 +410,7 @@ export default function Portfolio() {
                         title="Delete Activity"
                         onClick={() => setDeletingActivity(item)}
                       >
-                        🗑️ Delete
+                        <Trash2 size={13} /> Delete
                       </button>
                     </div>
                   </div>
@@ -414,13 +429,13 @@ export default function Portfolio() {
           onClick={() => setIsSubmitOpen(true)}
           title="Click to Submit Activity"
         >
-          +
+          <PlusCircle size={24} />
         </div>
 
         <div>
-          <h3>Ongoing Academic Repository</h3>
+          <h3>Continuous Academic Repository</h3>
           <p>
-            This portfolio continues to expand as new laboratory activities, student presentations, and environmental assignments are prepared. Click <strong>"+ Submit New Activity"</strong> to record fresh work.
+            This portfolio continues to expand as new laboratory experiments, research papers, and sustainable computing projects are created. Click <strong>"+ Submit New Activity"</strong> to document fresh work.
           </p>
         </div>
       </section>

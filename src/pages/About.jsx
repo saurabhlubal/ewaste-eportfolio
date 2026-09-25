@@ -1,5 +1,21 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import {
+  Recycle,
+  Cpu,
+  BatteryCharging,
+  Monitor,
+  AlertTriangle,
+  ShieldCheck,
+  RotateCcw,
+  Sparkles,
+  ArrowRight,
+  FileText,
+  CheckCircle2,
+  Globe,
+  Layers,
+  BookOpen
+} from "lucide-react";
 
 export default function About() {
   const containerVariants = {
@@ -11,113 +27,278 @@ export default function About() {
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 18 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+    },
   };
 
   return (
     <main className="about-page">
+      {/* =========================================================
+          ABOUT HEADER
+      ========================================================= */}
       <section className="about-header">
-        <span className="section-label">ACADEMIC FOUNDATION</span>
-        <h1>
-          E-Waste & <span>Sustainability.</span>
-        </h1>
-        <p>
-          Examining the environmental footprint of digital technology, the global crisis of electronic waste, and the engineered solutions for sustainable product lifecycles.
-        </p>
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <span className="section-label">ACADEMIC FOUNDATION & SCIENTIFIC INQUIRY</span>
+          <h1>
+            E-Waste & <span className="gradient-text">Sustainable Tech.</span>
+          </h1>
+          <p>
+            Investigating the accelerating crisis of electronic waste, toxic material degradation in landfills, statutory Extended Producer Responsibility (EPR), and engineered circular lifecycles for next-generation hardware.
+          </p>
+        </motion.div>
       </section>
 
-      <motion.section
-        className="about-content"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <motion.div className="about-text" variants={itemVariants}>
-          <span className="section-label">THE REAL COST OF HARDWARE</span>
-          <h2>
-            Modern computing carries an <span>environmental footprint.</span>
-          </h2>
-          <p>
-            Millions of laptops, smartphones, displays, and servers are discarded each year as consumer demand for newer devices accelerates. Without regulated recycling, toxic heavy metals such as mercury, lead, and flame retardants leach into soil and aquifers.
+      {/* =========================================================
+          THE ANATOMY OF E-WASTE (DETAILED MATERIAL BREAKDOWN)
+      ========================================================= */}
+      <section className="about-materials-section">
+        <div className="section-head text-center">
+          <span className="section-label">MATERIAL ANALYSIS</span>
+          <h2>The Anatomy of Discarded Electronics</h2>
+          <p className="section-intro">
+            Consumer hardware contains both immensely valuable precious elements and dangerous bio-accumulative toxins. Understanding their chemical composition is essential for circular engineering.
           </p>
-          <p>
-            This course investigates the chemistry of e-waste, statutory waste management frameworks, and how future IT leaders can foster circular computing systems that treat retired electronics as valuable material reserves rather than disposable trash.
+        </div>
+
+        <motion.div
+          className="materials-grid"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
+          {/* Card 1: Printed Circuit Boards */}
+          <motion.div className="material-card" variants={itemVariants} whileHover={{ y: -6 }}>
+            <div className="material-icon-box pcb">
+              <Cpu size={32} />
+            </div>
+            <div className="material-badge">CORE ELECTRONICS</div>
+            <h3>Printed Circuit Boards (PCBs)</h3>
+            <p>
+              High-density motherboards and microchips represent the highest concentration of recoverable gold, silver, and palladium on earth.
+            </p>
+            <div className="material-element-list">
+              <div className="element-tag value">
+                <strong>Recoverable:</strong> Gold (Au), Copper (Cu), Tantalum (Ta)
+              </div>
+              <div className="element-tag toxic">
+                <strong>Hazard:</strong> Brominated flame retardants & Lead solder
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Card 2: Batteries & Power Systems */}
+          <motion.div className="material-card" variants={itemVariants} whileHover={{ y: -6 }}>
+            <div className="material-icon-box battery">
+              <BatteryCharging size={32} />
+            </div>
+            <div className="material-badge">STORAGE CELLS</div>
+            <h3>Lithium-Ion & Cobalt Batteries</h3>
+            <p>
+              Power cells in portable laptops, phones, and peripherals pose acute fire hazards and contaminate aquifers if crushed in standard municipal compactors.
+            </p>
+            <div className="material-element-list">
+              <div className="element-tag value">
+                <strong>Recoverable:</strong> Cobalt (Co), Lithium (Li), Nickel (Ni)
+              </div>
+              <div className="element-tag toxic">
+                <strong>Hazard:</strong> Hydrofluoric acid leaks & Thermal runaway
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Card 3: Displays & Optoelectronics */}
+          <motion.div className="material-card" variants={itemVariants} whileHover={{ y: -6 }}>
+            <div className="material-icon-box display">
+              <Monitor size={32} />
+            </div>
+            <div className="material-badge">DISPLAY UNITS</div>
+            <h3>Monitors, OLEDs & Cathode Rays</h3>
+            <p>
+              Liquid crystal displays, OLED panels, and legacy CRT monitors contain specialized rare-earth phosphor coatings and hazardous backlights.
+            </p>
+            <div className="material-element-list">
+              <div className="element-tag value">
+                <strong>Recoverable:</strong> Indium tin oxide (ITO), Optical glass
+              </div>
+              <div className="element-tag toxic">
+                <strong>Hazard:</strong> Mercury fluorescent vapor & Cadmium sulfide
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* =========================================================
+          THE 3R SUSTAINABILITY STRATEGY
+      ========================================================= */}
+      <section className="about-strategy-section">
+        <div className="section-head text-center">
+          <span className="section-label">ACTION PROTOCOL</span>
+          <h2>The 3R Circular Framework</h2>
+          <p className="section-intro">
+            A hierarchical approach to electronic stewardship that prioritizes source prevention before downcycling.
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div className="environment-cards" variants={itemVariants}>
-          <div className="environment-card">
-            <span>♻</span>
-            <h3>1. Reduce Generation</h3>
+        <div className="strategy-grid">
+          <motion.div
+            className="strategy-card"
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.4 }}
+          >
+            <div className="strategy-number">01</div>
+            <div className="strategy-header">
+              <div className="strategy-icon-box">
+                <RotateCcw size={24} />
+              </div>
+              <h3>1. Reduce Generation</h3>
+            </div>
             <p>
-              Prevent unnecessary device obsolescence through backwards compatibility and sustainable procurement policies.
+              Prevent unnecessary device obsolescence through backwards-compatible software design, modular hardware architectures, and statutory Right to Repair legislation.
             </p>
-          </div>
+            <ul className="strategy-bullets">
+              <li><CheckCircle2 size={15} /> Open diagnostics and firmware standards</li>
+              <li><CheckCircle2 size={15} /> Durable, screw-assembled enclosures</li>
+              <li><CheckCircle2 size={15} /> Extended corporate hardware lifecycles</li>
+            </ul>
+          </motion.div>
 
-          <div className="environment-card">
-            <span>🔄</span>
-            <h3>2. Prolong & Reuse</h3>
+          <motion.div
+            className="strategy-card"
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.4, delay: 0.15 }}
+          >
+            <div className="strategy-number">02</div>
+            <div className="strategy-header">
+              <div className="strategy-icon-box">
+                <Layers size={24} />
+              </div>
+              <h3>2. Prolong & Reuse</h3>
+            </div>
             <p>
-              Repurpose older hardware, support community computer refurbishment drives, and advocate for modular repair standards.
+              Repurpose functional computing equipment, support student and community computer refurbishment drives, and upgrade RAM/storage rather than retiring whole machines.
             </p>
-          </div>
+            <ul className="strategy-bullets">
+              <li><CheckCircle2 size={15} /> Linux conversion for older PC labs</li>
+              <li><CheckCircle2 size={15} /> Component harvesting for spare parts</li>
+              <li><CheckCircle2 size={15} /> Secondary market re-certification</li>
+            </ul>
+          </motion.div>
 
-          <div className="environment-card">
-            <span>🌱</span>
-            <h3>3. Certified Recycling</h3>
+          <motion.div
+            className="strategy-card"
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+          >
+            <div className="strategy-number">03</div>
+            <div className="strategy-header">
+              <div className="strategy-icon-box">
+                <Recycle size={24} />
+              </div>
+              <h3>3. Certified Recycling</h3>
+            </div>
             <p>
-              Channel discarded silicon through formal recovery plants where gold, copper, cobalt, and rare-earth elements are safely recaptured.
+              Channel discarded silicon through formal recovery plants where automated shredding, magnetic separation, and hydrometallurgy capture pure gold, copper, and cobalt without toxic emissions.
             </p>
-          </div>
-        </motion.div>
-      </motion.section>
+            <ul className="strategy-bullets">
+              <li><CheckCircle2 size={15} /> Zero landfill and zero incineration policy</li>
+              <li><CheckCircle2 size={15} /> Urban mining for clean precious metal yield</li>
+              <li><CheckCircle2 size={15} /> Formal R2 / e-Stewards certified recyclers</li>
+            </ul>
+          </motion.div>
+        </div>
+      </section>
 
-      {/* Scope of this Academic Portfolio */}
+      {/* =========================================================
+          REPOSITORY SCOPE
+      ========================================================= */}
       <section className="subject-focus">
-        <span className="section-label">PORTFOLIO REPOSITORY SCOPE</span>
-        <h2>
-          What You Will <span>Find Here</span>
-        </h2>
+        <div className="section-head text-center">
+          <span className="section-label">PORTFOLIO DOCUMENTATION</span>
+          <h2>What You Will Find in This Archive</h2>
+          <p className="section-intro">
+            A comprehensive academic dossier containing real-time course submissions, interactive learning tools, and digital research companions.
+          </p>
+        </div>
 
         <div className="focus-grid">
           <div className="focus-card">
-            <strong>01</strong>
-            <h3>Research Assignments</h3>
+            <div className="focus-card-top">
+              <strong className="focus-number">01</strong>
+              <div className="focus-icon-pill">
+                <FileText size={18} /> Research
+              </div>
+            </div>
+            <h3>Coursework Assignments</h3>
             <p>
-              Academic papers, critical analyses of e-waste statistics, government regulations, and reports exploring modern technological challenges.
+              Peer-reviewed analyses of global e-waste statistics, statutory policies like Extended Producer Responsibility (EPR), and technical evaluations of clean recycling chemistries.
             </p>
           </div>
 
           <div className="focus-card">
-            <strong>02</strong>
+            <div className="focus-card-top">
+              <strong className="focus-number">02</strong>
+              <div className="focus-icon-pill">
+                <Sparkles size={18} /> Interactive
+              </div>
+            </div>
             <h3>Educational Activities</h3>
             <p>
-              Curated crosswords, conceptual diagrams, photographic documentation, and campus awareness initiatives.
+              Curated environmental crossword puzzles, classroom activities, hardware teardown photo documentation, and interactive awareness materials.
             </p>
           </div>
 
           <div className="focus-card">
-            <strong>03</strong>
-            <h3>Presentations & Resources</h3>
+            <div className="focus-card-top">
+              <strong className="focus-number">03</strong>
+              <div className="focus-icon-pill">
+                <Globe size={18} /> Open Source
+              </div>
+            </div>
+            <h3>Digital Tools & Resources</h3>
             <p>
-              Slide decks, open-source companion links, GitHub repositories, and interactive tools for tracking sustainability metrics.
+              Companion slide presentations, open GitHub repositories, YouTube documentary case studies, and live digital projects tracking sustainability metrics.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Call to Action Banner */}
-      <section className="portfolio-banner-cta" style={{ marginTop: "100px" }}>
+      {/* =========================================================
+          PORTFOLIO BANNER CALL TO ACTION
+      ========================================================= */}
+      <section className="portfolio-banner-cta" style={{ marginTop: "80px" }}>
         <div className="cta-content">
-          <span className="cta-badge">EXPLORE WORK</span>
+          <span className="cta-badge">
+            <BookOpen size={14} /> EXPLORE THE SUBMISSIONS
+          </span>
           <h2>Examine the academic documentation</h2>
           <p>
-            Dive into the submissions repository to see assignments, activity reports, and educational media.
+            Dive into the submissions repository to see laboratory assignments, activity reports, and educational media stored directly in the cloud.
           </p>
           <div className="cta-buttons">
             <Link to="/portfolio" className="explore-btn">
-              Open Portfolio Activities →
+              Open Portfolio Activities <ArrowRight size={18} />
+            </Link>
+            <Link to="/student" className="learn-more-btn">
+              View Student Dossier
             </Link>
           </div>
         </div>

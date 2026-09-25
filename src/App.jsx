@@ -1,6 +1,17 @@
 import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { 
+  Home as HomeIcon, 
+  FolderKanban, 
+  User, 
+  BookOpen, 
+  PlusCircle, 
+  Menu, 
+  X, 
+  Sparkles,
+  Recycle
+} from "lucide-react";
 
 import Home from "./pages/Home";
 import Portfolio from "./pages/Portfolio";
@@ -15,7 +26,6 @@ function Navbar() {
 
   const closeMenu = () => setMenuOpen(false);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setMenuOpen(false);
   }, [location.pathname]);
@@ -29,44 +39,49 @@ function Navbar() {
   return (
     <nav className="navbar">
       <Link to="/" className="logo" onClick={closeMenu}>
-        <span className="logo-icon">♻</span>
+        <div className="logo-badge">
+          <Recycle className="logo-icon-svg" />
+        </div>
         <div className="logo-text">
-          <strong>Saurabh Lubal</strong>
-          <span className="logo-sub">E-Waste & Sustainability</span>
+          <div className="logo-title-row">
+            <strong>Saurabh Lubal</strong>
+            <span className="logo-live-dot" title="Active Academic Portfolio"></span>
+          </div>
+          <span className="logo-sub">E-Waste & Sustainability Portfolio</span>
         </div>
       </Link>
 
       {/* Desktop Navigation */}
       <div className="nav-links desktop-only">
         <Link to="/" className={isActive("/") ? "active" : ""}>
-          Home
+          <HomeIcon size={16} /> Home
         </Link>
 
         <Link to="/portfolio" className={isActive("/portfolio") ? "active" : ""}>
-          Portfolio
+          <FolderKanban size={16} /> Portfolio
         </Link>
 
         <Link to="/student" className={isActive("/student") ? "active" : ""}>
-          Student
+          <User size={16} /> Student
         </Link>
 
         <Link to="/about" className={isActive("/about") ? "active" : ""}>
-          About
+          <BookOpen size={16} /> About
         </Link>
 
         <Link to="/portfolio" className="nav-cta-btn">
-          + Submit Work
+          <PlusCircle size={16} /> Submit Work
         </Link>
       </div>
 
       {/* Mobile Hamburger Button */}
       <button
         type="button"
-        className={`menu-button ${menuOpen ? "active" : ""}`}
+        className="menu-button"
         onClick={() => setMenuOpen(!menuOpen)}
         aria-label="Toggle Navigation Menu"
       >
-        {menuOpen ? "✕" : "☰"}
+        {menuOpen ? <X size={22} /> : <Menu size={22} />}
       </button>
 
       {/* Mobile Dropdown Drawer */}
@@ -77,26 +92,26 @@ function Navbar() {
             initial={{ opacity: 0, y: -15 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.22, ease: "easeOut" }}
           >
             <Link to="/" onClick={closeMenu} className={isActive("/") ? "active" : ""}>
-              <span>🏡</span> Home
+              <HomeIcon size={18} /> Home
             </Link>
 
             <Link to="/portfolio" onClick={closeMenu} className={isActive("/portfolio") ? "active" : ""}>
-              <span>📚</span> Portfolio & Activities
+              <FolderKanban size={18} /> Portfolio & Activities
             </Link>
 
             <Link to="/student" onClick={closeMenu} className={isActive("/student") ? "active" : ""}>
-              <span>👤</span> Student Profile
+              <User size={18} /> Student Profile
             </Link>
 
             <Link to="/about" onClick={closeMenu} className={isActive("/about") ? "active" : ""}>
-              <span>🌿</span> About Subject
+              <BookOpen size={18} /> About Subject
             </Link>
 
             <Link to="/portfolio" onClick={closeMenu} className="mobile-cta-link">
-              + Submit New Activity
+              <PlusCircle size={18} /> Submit New Activity
             </Link>
           </motion.div>
         )}
@@ -105,7 +120,7 @@ function Navbar() {
   );
 }
 
-function App() {
+export default function App() {
   return (
     <BrowserRouter>
       <div className="app-layout">
@@ -126,5 +141,3 @@ function App() {
     </BrowserRouter>
   );
 }
-
-export default App;

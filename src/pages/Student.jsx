@@ -1,5 +1,19 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { 
+  GraduationCap, 
+  Award, 
+  BookOpen, 
+  Cpu, 
+  Recycle, 
+  Leaf, 
+  ArrowRight, 
+  CheckCircle2, 
+  Sparkles,
+  IdCard,
+  Building2,
+  FileCheck
+} from "lucide-react";
 
 export default function Student() {
   const containerVariants = {
@@ -23,10 +37,11 @@ export default function Student() {
           Academic <span>Profile.</span>
         </h1>
         <p>
-          Information Technology student focusing on the intersection of computing infrastructure, electronic waste lifecycle analysis, and sustainable software systems.
+          Information Technology student researching circular electronics, hazardous e-waste reduction, and sustainable software architecture.
         </p>
       </section>
 
+      {/* Profile Card */}
       <motion.section
         className="student-profile"
         variants={containerVariants}
@@ -34,8 +49,10 @@ export default function Student() {
         animate="visible"
       >
         <motion.div className="profile-visual" variants={itemVariants}>
-          <div className="profile-circle">♻</div>
-          <div className="profile-decoration">🌿</div>
+          <div className="profile-circle">
+            <Recycle size={70} className="icon-emerald" />
+          </div>
+          <div className="profile-decoration">🌱</div>
         </motion.div>
 
         <motion.div className="student-details" variants={itemVariants}>
@@ -45,7 +62,7 @@ export default function Student() {
           </div>
 
           <div className="detail-row">
-            <span>PROGRAM & DEGREE</span>
+            <span>DEGREE PROGRAM</span>
             <strong>Bachelor of Technology (B.Tech)</strong>
           </div>
 
@@ -65,47 +82,53 @@ export default function Student() {
           </div>
 
           <div className="detail-row">
-            <span>CORE INTERESTS</span>
-            <strong>Circular Electronics • Green Tech • IT Ethics</strong>
+            <span>ACADEMIC FOCUS</span>
+            <strong>Circular Electronics • Clean Dismantling • Green Tech</strong>
           </div>
         </motion.div>
       </motion.section>
 
-      {/* Competencies / Academic Focus Grid */}
+      {/* Sustainability Competencies Grid */}
       <section className="student-competencies-section">
-        <div className="text-center" style={{ marginBottom: "40px" }}>
+        <div className="text-center" style={{ marginBottom: "35px" }}>
           <span className="section-label">AREAS OF STUDY</span>
-          <h2>Key Sustainability Competencies</h2>
+          <h2>Key Coursework Competencies</h2>
         </div>
 
         <div className="competencies-grid">
           <div className="competency-card">
-            <span className="comp-icon">🔋</span>
+            <div className="comp-icon-wrapper">
+              <Cpu size={28} className="comp-icon-svg" />
+            </div>
             <h3>Hardware Lifecycle Analysis</h3>
             <p>
-              Studying the cradle-to-grave trajectory of consumer electronics, batteries, printed circuit boards (PCBs), and semiconductors.
+              Auditing the entire path of consumer devices, batteries, printed circuit boards (PCBs), and rare-earth components from manufacture to recovery.
             </p>
           </div>
 
           <div className="competency-card">
-            <span className="comp-icon">⚖️</span>
-            <h3>Compliance & E-Waste Policies</h3>
+            <div className="comp-icon-wrapper">
+              <Award size={28} className="comp-icon-svg" />
+            </div>
+            <h3>Compliance & Environmental Norms</h3>
             <p>
-              Reviewing national and global regulations (WEEE directives, EPR policies, and hazardous chemical restrictions).
+              Studying national electronic waste guidelines, statutory Extended Producer Responsibility (EPR) mandates, and hazardous substance bans.
             </p>
           </div>
 
           <div className="competency-card">
-            <span className="comp-icon">🌐</span>
-            <h3>Sustainable Cloud & Computing</h3>
+            <div className="comp-icon-wrapper">
+              <Leaf size={28} className="comp-icon-svg" />
+            </div>
+            <h3>Green Computing Standards</h3>
             <p>
-              Evaluating data center energy efficiency, carbon emission metrics, and software optimization techniques that extend legacy hardware utility.
+              Investigating energy-efficient software design, reducing carbon overhead in digital infrastructure, and extending legacy hardware lifespans.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Learning Journey & Philosophy */}
+      {/* Student Learning Manifesto */}
       <motion.section
         className="student-message"
         initial={{ opacity: 0, y: 25 }}
@@ -114,20 +137,20 @@ export default function Student() {
         transition={{ duration: 0.6 }}
       >
         <div>
-          <span className="section-label">MY LEARNING MANIFESTO</span>
+          <span className="section-label">ACADEMIC MANIFESTO</span>
           <h2>
-            Developing technology that <span>respects planetary limits.</span>
+            Building technology that <span>respects our environment.</span>
           </h2>
         </div>
 
         <div>
           <p>
-            As technology students, our code and hardware choices directly impact global energy consumption and landfill toxicity. My objective through this course and e-portfolio is to champion circular economy principles—ensuring that what we engineer can be responsibly dismantled, recycled, and reused.
+            As future software engineers and IT professionals, every technological decision we make carries physical environmental consequences. Through this e-portfolio, I explore how engineers can advocate for circular economy principles—ensuring that computing hardware is safely refurbished, dismantled, and kept out of hazardous landfill dumps.
           </p>
 
           <div style={{ marginTop: "24px" }}>
             <Link to="/portfolio" className="explore-btn">
-              Explore Coursework & Submissions →
+              Explore Academic Work <ArrowRight size={16} />
             </Link>
           </div>
         </div>

@@ -2,6 +2,20 @@ import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
+  ArrowLeft,
+  FileText,
+  Download,
+  ExternalLink,
+  Edit3,
+  Trash2,
+  Calendar,
+  Sparkles,
+  Paperclip,
+  Globe,
+  Tag,
+  Eye
+} from "lucide-react";
+import {
   getActivityById,
   updateActivity,
   deleteActivity,
@@ -86,11 +100,11 @@ export default function Assignment() {
       <main className="assignment-page">
         <div className="assignment-card text-center">
           <h2>Activity Not Found</h2>
-          <p style={{ color: "#60796b", margin: "15px 0 25px" }}>
+          <p style={{ color: "#435e4e", margin: "15px 0 25px" }}>
             The academic activity you are looking for does not exist or may have been removed.
           </p>
           <Link to="/portfolio" className="explore-btn">
-            ← Return to Portfolio
+            <ArrowLeft size={16} /> Return to Portfolio
           </Link>
         </div>
       </main>
@@ -113,7 +127,7 @@ export default function Assignment() {
     <main className="assignment-page">
       <div className="assignment-header-nav">
         <Link to="/portfolio" className="back-btn">
-          ← Back to Portfolio
+          <ArrowLeft size={16} /> Back to Repository
         </Link>
 
         <div className="assignment-header-actions">
@@ -124,7 +138,7 @@ export default function Assignment() {
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
           >
-            ✏️ Edit Activity
+            <Edit3 size={14} /> Edit Activity
           </motion.button>
           <motion.button
             type="button"
@@ -133,29 +147,34 @@ export default function Assignment() {
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
           >
-            🗑️ Delete Activity
+            <Trash2 size={14} /> Delete Activity
           </motion.button>
         </div>
       </div>
 
       <motion.article
         className="assignment-card"
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
       >
         <div className="assignment-meta-top">
           <span className="assignment-badge">
             {assignment.category ? assignment.category.toUpperCase() : "E-WASTE"}
           </span>
-          <span className="assignment-date">{assignment.date}</span>
+          <span className="assignment-date">
+            <Calendar size={13} className="inline-icon" /> {assignment.date}
+          </span>
         </div>
 
         <h1>{assignment.title}</h1>
 
         {assignment.remarks && (
           <div className="assignment-remarks">
-            <strong>Reflection & Remarks:</strong> {assignment.remarks}
+            <div className="remarks-label">
+              <Sparkles size={16} /> Academic Reflection & Remarks
+            </div>
+            <p>{assignment.remarks}</p>
           </div>
         )}
 
@@ -174,14 +193,14 @@ export default function Assignment() {
                 rel="noopener noreferrer"
                 className="pdf-button"
               >
-                🖼️ View Full Image ↗
+                <Eye size={16} /> View Full Resolution
               </a>
               <a
                 href={fileUrl}
                 download={assignment.fileName || "assignment-image"}
                 className="download-file-btn"
               >
-                ⬇ Download Image
+                <Download size={16} /> Download Image
               </a>
             </div>
           </div>
@@ -190,11 +209,13 @@ export default function Assignment() {
         {/* PDF PREVIEW & VIEWER */}
         {isPdf && fileUrl && (
           <div className="pdf-section">
-            <div className="pdf-icon">📄</div>
+            <div className="pdf-icon">
+              <FileText size={48} className="icon-emerald" />
+            </div>
             <h2>{assignment.fileName || "PDF Document"}</h2>
             <p>
               Academic document attachment ({formatFileSize(assignment.fileSize)}).
-              Preview below or open in full resolution.
+              Review directly below or open in a dedicated tab.
             </p>
 
             <div className="pdf-action-buttons">
@@ -204,14 +225,14 @@ export default function Assignment() {
                 rel="noopener noreferrer"
                 className="pdf-button"
               >
-                📄 Open Full PDF ↗
+                <ExternalLink size={16} /> Open Full PDF ↗
               </a>
               <a
                 href={fileUrl}
                 download={assignment.fileName || "document.pdf"}
                 className="download-file-btn"
               >
-                ⬇ Download PDF
+                <Download size={16} /> Download PDF
               </a>
             </div>
 
@@ -228,7 +249,9 @@ export default function Assignment() {
         {/* OTHER DOCUMENT PREVIEW (Word / PPT / etc.) */}
         {!isPdf && !isImage && fileUrl && (
           <div className="document-card-section">
-            <div className="doc-icon">📎</div>
+            <div className="doc-icon">
+              <Paperclip size={32} className="icon-emerald" />
+            </div>
             <div className="doc-details">
               <h3>{assignment.fileName || "Academic Document"}</h3>
               <p>
@@ -240,7 +263,7 @@ export default function Assignment() {
               download={assignment.fileName || "assignment-document"}
               className="download-file-btn"
             >
-              ⬇ Download Document
+              <Download size={16} /> Download File
             </a>
           </div>
         )}
@@ -249,52 +272,46 @@ export default function Assignment() {
         {Array.isArray(assignment.links) && assignment.links.length > 0 && (
           <div className="assignment-links-section">
             <div className="links-section-heading">
-              <span>🔗</span>
-              <h3>Online Resources & Companion Links</h3>
+              <Globe size={20} className="icon-emerald" />
+              <h3>Companion Online Resources & Links</h3>
             </div>
             <div className="links-grid">
-              {assignment.links.map((link, idx) => {
-                const labelLower = (link.label || "").toLowerCase();
-                let icon = "🌐";
-                if (labelLower.includes("github")) icon = "💻";
-                else if (labelLower.includes("youtube")) icon = "▶️";
-                else if (labelLower.includes("drive")) icon = "📁";
-                else if (labelLower.includes("presentation")) icon = "📊";
-                else if (labelLower.includes("paper") || labelLower.includes("report")) icon = "📄";
-
-                return (
-                  <motion.a
-                    key={idx}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="activity-link-card"
-                    whileHover={{ y: -3, scale: 1.01 }}
-                    whileTap={{ scale: 0.99 }}
-                  >
-                    <div className="link-card-icon">{icon}</div>
-                    <div className="link-card-info">
-                      <strong className="link-card-label">{link.label || "External Resource"}</strong>
-                      <span className="link-card-url">{link.url}</span>
-                    </div>
-                    <span className="link-card-arrow">↗</span>
-                  </motion.a>
-                );
-              })}
+              {assignment.links.map((link, idx) => (
+                <motion.a
+                  key={idx}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="activity-link-card"
+                  whileHover={{ y: -3, scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
+                >
+                  <div className="link-card-icon">
+                    <Globe size={20} />
+                  </div>
+                  <div className="link-card-info">
+                    <strong className="link-card-label">{link.label || "External Resource"}</strong>
+                    <span className="link-card-url">{link.url}</span>
+                  </div>
+                  <ExternalLink size={16} className="link-card-arrow" />
+                </motion.a>
+              ))}
             </div>
           </div>
         )}
 
         {/* FULL ACTIVITY DESCRIPTION */}
         <div className="assignment-description">
-          <h3>Activity Description & Overview</h3>
+          <h3>Activity Description & Context</h3>
           <p>{assignment.description}</p>
         </div>
 
         {/* TAGS */}
         {Array.isArray(assignment.tags) && assignment.tags.length > 0 && (
           <div className="assignment-tags-container">
-            <span className="tags-label">Tags:</span>
+            <span className="tags-label">
+              <Tag size={14} className="inline-icon" /> Tags:
+            </span>
             <div className="tags-list">
               {assignment.tags.map((tag, i) => (
                 <span key={i} className="assignment-tag-pill">
