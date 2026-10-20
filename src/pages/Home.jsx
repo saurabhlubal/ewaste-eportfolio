@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { 
   ArrowRight, 
   Recycle, 
@@ -18,20 +18,21 @@ import {
 
 export default function Home() {
   const [videoError, setVideoError] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.12,
-        delayChildren: 0.1,
+        staggerChildren: shouldReduceMotion ? 0 : 0.1,
+        delayChildren: shouldReduceMotion ? 0 : 0.08,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 20 },
     visible: {
       opacity: 1,
       y: 0,
@@ -42,29 +43,28 @@ export default function Home() {
   return (
     <main className="home-page">
       {/* =========================================================
-          CINEMATIC HERO SECTION
+          CINEMATIC HERO SECTION (MOTION.DEV INSPIRED)
       ========================================================= */}
       <section className="home-hero">
         {/* Subtle Ambient Video Background */}
-        <div className="hero-video-container">
-          {!videoError && (
+        <div className="hero-video-container" aria-hidden="true">
+          {!videoError && !shouldReduceMotion ? (
             <video
               autoPlay
               loop
               muted
               playsInline
+              poster="/images/ewaste-poster.jpg"
               className="hero-background-video"
               onError={() => setVideoError(true)}
             >
-              <source
-                src="https://assets.mixkit.co/videos/preview/mixkit-sun-shining-through-the-trees-of-a-lush-forest-41584-large.mp4"
-                type="video/mp4"
-              />
-              <source
-                src="https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-the-sunlight-529-large.mp4"
-                type="video/mp4"
-              />
+              <source src="/videos/ewaste-background.mp4" type="video/mp4" />
             </video>
+          ) : (
+            <div
+              className="hero-background-fallback"
+              style={{ backgroundImage: `url('/images/ewaste-poster.jpg')` }}
+            />
           )}
           <div className="hero-video-overlay"></div>
           <div className="hero-mesh-glow"></div>
@@ -111,26 +111,39 @@ export default function Home() {
           </motion.div>
 
           <motion.div className="hero-cta-group" variants={itemVariants}>
-            <Link to="/portfolio" className="explore-btn">
-              Explore Portfolio Work <ArrowRight size={18} />
-            </Link>
-            <Link to="/about" className="learn-more-btn">
-              Why Sustainability?
-            </Link>
+            <motion.div
+              whileHover={{ y: -2, scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 400, damping: 20 }}
+            >
+              <Link to="/portfolio" className="explore-btn">
+                Explore Portfolio Work <ArrowRight size={18} />
+              </Link>
+            </motion.div>
+
+            <motion.div
+              whileHover={{ y: -2, scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 400, damping: 20 }}
+            >
+              <Link to="/about" className="learn-more-btn">
+                About the Author & Research
+              </Link>
+            </motion.div>
           </motion.div>
         </motion.div>
 
         {/* Hero Right Visual: Glassmorphic Eco-Hub Showcase */}
         <motion.div
           className="home-visual-container"
-          initial={{ opacity: 0, scale: 0.95 }}
+          initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.25 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
         >
           {/* Main Floating Glass Hub */}
           <motion.div 
             className="eco-hub-card"
-            animate={{ y: [0, -8, 0] }}
+            animate={shouldReduceMotion ? {} : { y: [0, -8, 0] }}
             transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
           >
             <div className="hub-header">
@@ -164,7 +177,7 @@ export default function Home() {
             {/* Floating Mini Chips */}
             <motion.div 
               className="floating-chip chip-one"
-              animate={{ y: [0, -6, 0] }}
+              animate={shouldReduceMotion ? {} : { y: [0, -6, 0] }}
               transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 0.5 }}
             >
               <Leaf size={14} className="chip-icon" />
@@ -173,7 +186,7 @@ export default function Home() {
 
             <motion.div 
               className="floating-chip chip-two"
-              animate={{ y: [0, 6, 0] }}
+              animate={shouldReduceMotion ? {} : { y: [0, 6, 0] }}
               transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
             >
               <ShieldCheck size={14} className="chip-icon" />
@@ -190,9 +203,9 @@ export default function Home() {
         <div className="stats-container">
           <motion.div
             className="stat-box"
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 15 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-40px" }}
             transition={{ duration: 0.4 }}
           >
             <span className="stat-number">62M+</span>
@@ -201,10 +214,10 @@ export default function Home() {
 
           <motion.div
             className="stat-box"
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 15 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.1 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.4, delay: shouldReduceMotion ? 0 : 0.1 }}
           >
             <span className="stat-number">&lt; 23%</span>
             <span className="stat-label">Documented Formal Recycling Rate</span>
@@ -212,10 +225,10 @@ export default function Home() {
 
           <motion.div
             className="stat-box"
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 15 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.2 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.4, delay: shouldReduceMotion ? 0 : 0.2 }}
           >
             <span className="stat-number">3R Model</span>
             <span className="stat-label">Practical Campus Action Protocol</span>
@@ -223,10 +236,10 @@ export default function Home() {
 
           <motion.div
             className="stat-box"
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 15 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.3 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.4, delay: shouldReduceMotion ? 0 : 0.3 }}
           >
             <span className="stat-number">100%</span>
             <span className="stat-label">Open Academic Documentation</span>
@@ -252,7 +265,7 @@ export default function Home() {
           {/* Card 1: Linear Challenge */}
           <motion.div
             className="contrast-card challenge"
-            whileHover={{ y: -5 }}
+            whileHover={shouldReduceMotion ? {} : { y: -5 }}
             transition={{ duration: 0.2 }}
           >
             <div className="card-badge challenge">
@@ -275,7 +288,7 @@ export default function Home() {
           {/* Card 2: Circular Solution */}
           <motion.div
             className="contrast-card solution"
-            whileHover={{ y: -5 }}
+            whileHover={shouldReduceMotion ? {} : { y: -5 }}
             transition={{ duration: 0.2 }}
           >
             <div className="card-badge solution">
@@ -314,7 +327,7 @@ export default function Home() {
         <div className="features-grid">
           <motion.div
             className="feature-card"
-            whileHover={{ y: -6 }}
+            whileHover={shouldReduceMotion ? {} : { y: -6 }}
             transition={{ duration: 0.25 }}
           >
             <div className="feature-icon-wrapper">
@@ -328,7 +341,7 @@ export default function Home() {
 
           <motion.div
             className="feature-card"
-            whileHover={{ y: -6 }}
+            whileHover={shouldReduceMotion ? {} : { y: -6 }}
             transition={{ duration: 0.25 }}
           >
             <div className="feature-icon-wrapper">
@@ -342,7 +355,7 @@ export default function Home() {
 
           <motion.div
             className="feature-card"
-            whileHover={{ y: -6 }}
+            whileHover={shouldReduceMotion ? {} : { y: -6 }}
             transition={{ duration: 0.25 }}
           >
             <div className="feature-icon-wrapper">
@@ -369,12 +382,25 @@ export default function Home() {
             Experience our dynamic submission system. View PDF documents, open online GitHub repositories, or add a new academic activity with real-time database storage.
           </p>
           <div className="cta-buttons">
-            <Link to="/portfolio" className="explore-btn">
-              Open Portfolio Repository <ArrowRight size={18} />
-            </Link>
-            <Link to="/student" className="learn-more-btn">
-              View Student Dossier
-            </Link>
+            <motion.div
+              whileHover={{ y: -2, scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 400, damping: 20 }}
+            >
+              <Link to="/portfolio" className="explore-btn">
+                Open Portfolio Repository <ArrowRight size={18} />
+              </Link>
+            </motion.div>
+
+            <motion.div
+              whileHover={{ y: -2, scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 400, damping: 20 }}
+            >
+              <Link to="/student" className="learn-more-btn">
+                View Student Dossier
+              </Link>
+            </motion.div>
           </div>
         </div>
       </section>

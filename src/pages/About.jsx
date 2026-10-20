@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   Recycle,
   Cpu,
@@ -14,20 +14,45 @@ import {
   CheckCircle2,
   Globe,
   Layers,
-  BookOpen
+  BookOpen,
+  GraduationCap,
+  Code2,
+  Leaf,
+  ExternalLink
 } from "lucide-react";
 
+function GithubIcon({ size = 18, className = "" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+    </svg>
+  );
+}
+
+function LinkedinIcon({ size = 18, className = "" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
+    </svg>
+  );
+}
+
 export default function About() {
+  const shouldReduceMotion = useReducedMotion();
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.12, delayChildren: 0.1 },
+      transition: {
+        staggerChildren: shouldReduceMotion ? 0 : 0.1,
+        delayChildren: shouldReduceMotion ? 0 : 0.08,
+      },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 18 },
     visible: {
       opacity: 1,
       y: 0,
@@ -42,7 +67,7 @@ export default function About() {
       ========================================================= */}
       <section className="about-header">
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
@@ -53,6 +78,112 @@ export default function About() {
           <p>
             Investigating the accelerating crisis of electronic waste, toxic material degradation in landfills, statutory Extended Producer Responsibility (EPR), and engineered circular lifecycles for next-generation hardware.
           </p>
+        </motion.div>
+      </section>
+
+      {/* =========================================================
+          RESEARCHER & AUTHOR PERSONAL PROFILE (MOTION.DEV INSPIRED)
+      ========================================================= */}
+      <section className="about-author-section">
+        <motion.div
+          className="author-profile-card"
+          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        >
+          {/* Left Column: Portrait & Visual Badge */}
+          <div className="author-portrait-column">
+            <div className="author-image-wrapper">
+              <img
+                src="/images/saurabh-lubal.jpg"
+                alt="Saurabh Lubal - Author & Researcher"
+                className="author-portrait-img"
+                loading="eager"
+              />
+              <div className="author-image-overlay"></div>
+              <div className="author-image-badge">
+                <span className="badge-live-pulse"></span>
+                <span>B.Tech IT • Roll No. 24101C0040</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Bio, Interests & Social Links */}
+          <div className="author-content-column">
+            <div className="author-eyebrow">
+              <span className="eyebrow-chip">PORTFOLIO AUTHOR & RESEARCHER</span>
+            </div>
+
+            <h2 className="author-name">Saurabh Lubal</h2>
+
+            <div className="author-credentials">
+              <span className="cred-item">
+                <GraduationCap size={16} className="icon-emerald" /> B.Tech in Information Technology
+              </span>
+              <span className="cred-dot">•</span>
+              <span className="cred-item">
+                <Code2 size={16} className="icon-emerald" /> Software & Systems
+              </span>
+              <span className="cred-dot">•</span>
+              <span className="cred-item">
+                <Leaf size={16} className="icon-emerald" /> Green Computing
+              </span>
+            </div>
+
+            <div className="author-bio">
+              <p>
+                I am a Bachelor of Technology student specializing in Information Technology. My core academic and technical interests center around <strong>software development, modern systems engineering, and environmental sustainability</strong>.
+              </p>
+              <p>
+                As consumer demand for cutting-edge computing hardware accelerates, discarded electronics have become the fastest-growing waste stream on earth. Through this academic e-portfolio, I investigate statutory electronic waste frameworks, hazardous materials recovery, and how engineers can advocate for circular lifecycles and sustainable computing.
+              </p>
+            </div>
+
+            {/* Interest Pills */}
+            <div className="author-interests-group">
+              <span className="interest-pill">
+                <Code2 size={14} className="icon-emerald" /> Software Development
+              </span>
+              <span className="interest-pill">
+                <Cpu size={14} className="icon-emerald" /> Hardware Architecture
+              </span>
+              <span className="interest-pill">
+                <Recycle size={14} className="icon-emerald" /> Circular Electronics
+              </span>
+              <span className="interest-pill">
+                <Leaf size={14} className="icon-emerald" /> Environmental Stewardship
+              </span>
+            </div>
+
+            {/* Social Links Row */}
+            <div className="author-social-row">
+              <a
+                href="https://github.com/saurabhlubal"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="author-social-btn github"
+                aria-label="Saurabh Lubal's GitHub Profile (opens in new tab)"
+              >
+                <GithubIcon size={18} />
+                <span>github.com/saurabhlubal</span>
+                <ExternalLink size={13} className="ext-icon" />
+              </a>
+
+              <a
+                href="https://linkedin.com/in/saurabhlubal"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="author-social-btn linkedin"
+                aria-label="Saurabh Lubal's LinkedIn Profile (opens in new tab)"
+                title="LinkedIn Profile - Connect with Saurabh Lubal"
+              >
+                <LinkedinIcon size={18} />
+                <span>LinkedIn Profile</span>
+                <ExternalLink size={13} className="ext-icon" />
+              </a>
+            </div>
+          </div>
         </motion.div>
       </section>
 
@@ -73,7 +204,7 @@ export default function About() {
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-40px" }}
         >
           {/* Card 1: Printed Circuit Boards */}
           <motion.div className="material-card" variants={itemVariants} whileHover={{ y: -6 }}>
@@ -152,9 +283,9 @@ export default function About() {
         <div className="strategy-grid">
           <motion.div
             className="strategy-card"
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 18 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-40px" }}
             whileHover={{ y: -5 }}
             transition={{ duration: 0.4 }}
           >
@@ -177,11 +308,11 @@ export default function About() {
 
           <motion.div
             className="strategy-card"
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 18 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-40px" }}
             whileHover={{ y: -5 }}
-            transition={{ duration: 0.4, delay: 0.15 }}
+            transition={{ duration: 0.4, delay: shouldReduceMotion ? 0 : 0.15 }}
           >
             <div className="strategy-number">02</div>
             <div className="strategy-header">
@@ -202,11 +333,11 @@ export default function About() {
 
           <motion.div
             className="strategy-card"
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 18 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-40px" }}
             whileHover={{ y: -5 }}
-            transition={{ duration: 0.4, delay: 0.3 }}
+            transition={{ duration: 0.4, delay: shouldReduceMotion ? 0 : 0.3 }}
           >
             <div className="strategy-number">03</div>
             <div className="strategy-header">
