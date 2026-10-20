@@ -5,37 +5,82 @@ const LOCAL_STORAGE_KEY = "ewaste_portfolio_activities_local";
 
 // Helper to convert existing static assignments to the full activity model
 export const convertStaticAssignments = () => {
-  return initialAssignments.map((item) => ({
-    id: String(item.id),
-    title: item.title,
-    description: item.description?.trim() || item.shortDescription || "",
-    category: "E-Waste",
-    date: item.date || new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" }),
-    remarks: item.shortDescription || "",
-    tags: ["E-Waste", "Sustainability"],
-    links: [],
-    fileName: item.pdf ? "crossword.pdf" : (item.image ? "assignment-01.jpeg" : "document.pdf"),
-    fileType: item.pdf ? "application/pdf" : (item.image ? "image/jpeg" : "application/pdf"),
-    fileSize: 1024 * 1024,
-    fileUrl: item.pdf || item.image || "",
-    storagePath: null,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  }));
+  return initialAssignments.map((item) => {
+    const fileTarget = item.pdf || item.image || item.file || "";
+    let inferredType = "application/pdf";
+    let inferredName = "document.pdf";
+
+    if (item.pdf) {
+      inferredType = "application/pdf";
+      inferredName = item.pdf.split("/").pop();
+    } else if (item.image) {
+      inferredType = "image/jpeg";
+      inferredName = item.image.split("/").pop();
+    } else if (item.file) {
+      inferredName = item.file.split("/").pop();
+      if (inferredName.endsWith(".pdf")) inferredType = "application/pdf";
+      else if (inferredName.match(/\.(jpg|jpeg|png)$/i)) inferredType = "image/jpeg";
+      else if (inferredName.endsWith(".pptx")) inferredType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+      else if (inferredName.endsWith(".docx")) inferredType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    }
+
+    return {
+      id: String(item.id),
+      title: item.title,
+      description: item.description?.trim() || item.shortDescription || "",
+      category: item.category || "E-Waste",
+      date: item.date || new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" }),
+      remarks: item.remarks || item.shortDescription || "",
+      tags: Array.isArray(item.tags) ? item.tags : ["E-Waste", "Sustainability"],
+      links: Array.isArray(item.links) ? item.links : [],
+      fileName: inferredName,
+      fileType: inferredType,
+      fileSize: 1024 * 1024,
+      fileUrl: fileTarget,
+      storagePath: null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+  });
 };
 
 // Local storage fallback helpers
 const getLocalActivities = () => {
+  const defaultActivities = convertStaticAssignments();
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        // Ensure all default academic assignments (1 to 7) exist, while keeping user's custom activities!
+        const existingIds = new Set(parsed.map((p) => String(p.id)));
+        const missingStatic = defaultActivities.filter((d) => !existingIds.has(String(d.id)));
+
+        const merged = parsed.map((item) => {
+          const matchStatic = defaultActivities.find((d) => String(d.id) === String(item.id));
+          if (matchStatic) {
+            return {
+              ...matchStatic,
+              ...item,
+              fileUrl: item.fileUrl || matchStatic.fileUrl,
+              fileName: item.fileName || matchStatic.fileName,
+              fileType: item.fileType || matchStatic.fileType,
+              links: Array.isArray(item.links) && item.links.length > 0 ? item.links : matchStatic.links,
+              tags: Array.isArray(item.tags) && item.tags.length > 0 ? item.tags : matchStatic.tags,
+            };
+          }
+          return item;
+        });
+
+        const finalList = [...merged, ...missingStatic];
+        saveLocalActivities(finalList);
+        return finalList;
+      }
     }
   } catch (e) {
     console.warn("Failed to read from localStorage:", e);
   }
-  const defaultActivities = convertStaticAssignments();
+
   saveLocalActivities(defaultActivities);
   return defaultActivities;
 };
@@ -426,7 +471,7 @@ export async function seedExistingAssignments() {
       date: item.date,
       remarks: item.remarks,
       tags: item.tags,
-      links: [],
+      links: item.links || [],
       file_name: item.fileName,
       file_type: item.fileType,
       file_size: item.fileSize,

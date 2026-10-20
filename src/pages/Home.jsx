@@ -54,16 +54,17 @@ export default function Home() {
               loop
               muted
               playsInline
-              poster="/images/ewaste-poster.jpg"
+              poster="/images/nature-poster.jpg"
               className="hero-background-video"
               onError={() => setVideoError(true)}
             >
+              <source src="/videos/nature-background.webm" type="video/webm" />
               <source src="/videos/ewaste-background.mp4" type="video/mp4" />
             </video>
           ) : (
             <div
               className="hero-background-fallback"
-              style={{ backgroundImage: `url('/images/ewaste-poster.jpg')` }}
+              style={{ backgroundImage: `url('/images/nature-poster.jpg')` }}
             />
           )}
           <div className="hero-video-overlay"></div>
