@@ -352,18 +352,18 @@ button {
   object-fit: cover;
   background-size: cover;
   background-position: center;
-  opacity: 0.32;
-  filter: saturate(1.2) contrast(1.08);
+  opacity: 0.85;
+  filter: saturate(1.25) contrast(1.1) brightness(0.96);
 }
 
 .hero-video-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(
-    135deg,
-    rgba(251, 252, 251, 0.94) 0%,
-    rgba(240, 253, 244, 0.88) 50%,
-    rgba(220, 252, 231, 0.78) 100%
+    90deg,
+    rgba(251, 252, 251, 0.62) 0%,
+    rgba(251, 252, 251, 0.38) 45%,
+    rgba(240, 253, 244, 0.16) 100%
   );
   pointer-events: none;
 }
